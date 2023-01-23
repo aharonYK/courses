@@ -7,7 +7,7 @@ const _ = require("lodash");
 
 
 //GET E-MAIL
-router.get("/:email", async (req, res) => {
+router.get("/users/:email", async (req, res) => {
   try {
     const email = req.params.email;
     const users = await db.query(
@@ -35,7 +35,7 @@ router.get("/users/:id", async (req, res) => {
 });
 
 //GET ALL COURSES FOR USER
-router.get("/:email/:id", async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
     const id = [req.params.id];
     const sqlQuey = `select * from courses where user_id=$1` 
@@ -113,11 +113,11 @@ router.post("/AddTo", async (req, res) => {
   try {
     const { subject, id } = req.body;
    // locate the subject id from the subject table
-    const decoded = jwt.verify(token, "secret_key");
-    if (decoded.id !== parseInt(id)) {
-      res.status(401).json({ error: "Unauthorized" });
-      return;
-    }
+    // const decoded = jwt.verify(token, "secret_key");
+    // if (decoded.id !== parseInt(id)) {
+    //   res.status(401).json({ error: "Unauthorized" });
+    //   return;
+    // }
     const sub = await db.query(
       `SELECT id FROM subjects WHERE subject = '${subject}'`
     );
@@ -179,20 +179,20 @@ for(i=0;i<Num.rowCount;i++){
 });
 
 //REMOVE FROM COURS
-router.delete("/:id/:userId", async (req, res) => {
+router.delete("/:id/:user_id", async (req, res) => {
   const token = req.headers.authorization;
   try {
-    const { subject_id, user_id } = req.params;
-    // decode and verify token
-    const decoded = jwt.verify(token, "secret_key");
+    const { id, user_id } = req.params;
+   // decode and verify token
+    //const decoded = jwt.verify(token, "secret_key");
 
-    if (decoded.user_id !== parseInt(user_id)) {
-      res.status(401).json({ error: "Unauthorized" });
-      return;
-    }
-    // remove the user from the course
+    // if (decoded.user_id !== parseInt(user_id)) {
+    //   res.status(401).json({ error: "Unauthorized" });
+    //   return;
+    // }
+    //remove the user from the course
     await db.query(
-      `DELETE FROM course WHERE subject_id = ${subject_id} AND user_id = ${user_id}`
+      `DELETE FROM courses WHERE id = ${id} AND user_id = ${user_id}`
     );
     res.json({
       message: "User removed from course",

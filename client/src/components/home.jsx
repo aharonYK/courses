@@ -8,11 +8,28 @@ import javascript from '../images/javascript.jpg';
 import mongo from '../images/mongo.jpg';
 import python from '../images/python.jpg';
 import sql from '../images/sql.jpg';
+import jwt_decode from "jwt-decode";
 
 import { useNavigate } from 'react-router-dom';
 
 
+
 const Home = (props) => {
+    const token1=localStorage.getItem('authToken')
+    const ans=jwt_decode(token1,'x-auth-token')
+
+    const handleClick = async (subject, id) => {
+        try {
+          const res = await axios.post('http://localhost:3200/api/courses/AddTo', { subject, id });
+          // handle success response
+          console.log(res.data);
+        } catch (error) {
+          // handle error
+          console.log(error);
+        }
+      }
+    
+
     
     useEffect(() => {
         const button = document.querySelector('.back-to-top-button');
@@ -35,14 +52,14 @@ const Home = (props) => {
     <td>
     <div class="card" id='mongo'>
     <img src={react} class='homeImage' alt="Logo" />;
-    <button class="btn">
+    <button class="btn" onClick={()=>handleClick("React",ans.userId)}>
     <span>Enter Course &#9998;</span>
 </button></div>
     </td>
     <td>
     <div class="card">
     <img src={docker} class='homeImage' alt="Logo" />;
-    <button class="btn">
+    <button class="btn" onClick={()=>handleClick("Docker",ans.userId)}>
     <a>Enter Course &#9998;</a>
 </button>
     </div>
@@ -52,7 +69,7 @@ const Home = (props) => {
 <td>
  <div class="card">
  <img src={java} class='homeImage' alt="Logo" />;
- <button class="btn">
+ <button class="btn" onClick={()=>handleClick("Java",ans.userId)}>
     <a>Enter Course &#9998;</a>
 </button>
  </div>
@@ -60,7 +77,7 @@ const Home = (props) => {
  <td>
  <div class="card">
  <img src={javascript} class='homeImage' alt="Logo" />;
- <button class="btn">
+ <button class="btn" onClick={()=>handleClick("Javascript",ans.userId)}>
     <a>Enter Course &#9998;</a>
 </button>
  </div>
@@ -70,7 +87,7 @@ const Home = (props) => {
 <td>
     <div class="card">
     <img src={mongo} class='homeImage' alt="Logo" />;
-    <button class="btn">
+    <button class="btn" onClick={()=>handleClick("Mongo",ans.userId)}>
     <a>Enter Course &#9998;</a>
 </button>
     </div>
@@ -78,7 +95,7 @@ const Home = (props) => {
     <td>
  <div class="card">
  <img src={python} class='homeImage' alt="Logo" />;
- <button class="btn">
+ <button class="btn" onClick={()=>handleClick("Python",ans.userId)}>
     <a>Enter Course &#9998;</a>
 </button>
  </div>
@@ -89,7 +106,7 @@ const Home = (props) => {
 <td>
     <div class="card">
     <img src={sql} class='homeImage' alt="Logo" />;
-    <button class="btn">
+    <button class="btn" onClick={()=>handleClick("SQL",ans.userId)}> 
     <a>Enter Course &#9998;</a>
 </button>
     </div>
